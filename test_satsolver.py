@@ -36,11 +36,21 @@ class TestVarSet(unittest.TestCase):
 
 class TestLiteral(unittest.TestCase):
 
+    def setUp(self):
+        self.literal_obj = satsolver.Literal(3, False)
+        self.literal_obj2 = satsolver.Literal(2, True)
+
     def test_single_literal(self):
         expected = (3, False)
-        literal_obj = satsolver.Literal(3, False)
-        actual = (literal_obj.number, literal_obj.setting)
+        actual = (self.literal_obj.number, self.literal_obj.setting)
         self.assertEqual(expected, actual)
+
+    def test_to_string(self):
+        expected1, expected2 = "-3", "2"
+        actual1 =  self.literal_obj.to_string()
+        actual2 =  self.literal_obj2.to_string()
+        self.assertEqual(expected1, actual1)
+        self.assertEqual(expected2, actual2)
 
 
 class TestClause(unittest.TestCase):
@@ -51,33 +61,36 @@ class TestClause(unittest.TestCase):
             satsolver.Literal(2, True),
             satsolver.Literal(1, True),
         )
+        self.clause_obj = satsolver.Clause()
 
     def test_single_clause(self):
         expected = set([(1, True), (2, True), (3, False)])
-        clause_obj = satsolver.Clause()
         for literal in self.literals:
-            clause_obj.add_literals(literal)
+            self.clause_obj.add_literals(literal)
         actual = set([
-            (lit.number, lit.setting) for lit in clause_obj.literals
+            (lit.number, lit.setting) for lit in self.clause_obj.literals
         ])
         self.assertEqual(expected, actual)
 
     def test_add_several_clauses_at_once(self):
         expected = set([(1, True), (2, True), (3, False)])
-        clause_obj = satsolver.Clause()
-        clause_obj.add_literals(*self.literals)
+        self.clause_obj.add_literals(*self.literals)
         actual = set([
-            (lit.number, lit.setting) for lit in clause_obj.literals
+            (lit.number, lit.setting) for lit in self.clause_obj.literals
         ])
         self.assertEqual(expected, actual)
 
-
     def test_too_many_literals(self):
-        clause_obj = satsolver.Clause()
         for literal in self.literals:
-            clause_obj.add_literals(literal)
+            self.clause_obj.add_literals(literal)
         with self.assertRaises(satsolver.TooManyLiterals):
-            clause_obj.add_literals(satsolver.Literal(4, False))
+            self.clause_obj.add_literals(satsolver.Literal(4, False))
+
+    def test_to_string(self):
+        expected = "1 2 -3\n"
+        self.clause_obj.add_literals(*self.literals)
+        actual = self.clause_obj.to_string()
+        self.assertEqual(expected, actual)
 
 
 #class TestProblem(unittest.TestCase):

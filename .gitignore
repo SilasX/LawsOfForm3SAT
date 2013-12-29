@@ -4,3 +4,4 @@ original.py
 problems/
 *.pyc
 *.pyo
+*.swp

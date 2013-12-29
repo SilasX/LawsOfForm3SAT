@@ -43,6 +43,9 @@ class Literal(object):
         self.number = number
         self.setting = setting
 
+    def to_string(self):
+        prefix = "" if self.setting == True else "-"
+        return "{0}{1}".format(prefix, self.number)
 
 class Clause(object):
 
@@ -55,3 +58,10 @@ class Clause(object):
                 raise TooManyLiterals
             else:
                 self.literals.add(literal)
+
+    def to_string(self):
+        return "{}\n".format(" ".join(
+            lit.to_string() for lit in sorted(
+                self.literals, key=lambda x: x.number
+            )
+        ))
