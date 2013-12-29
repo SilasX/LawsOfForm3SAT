@@ -47,6 +47,7 @@ class Literal(object):
         prefix = "" if self.setting == True else "-"
         return "{0}{1}".format(prefix, self.number)
 
+
 class Clause(object):
 
     def __init__(self):
@@ -59,9 +60,28 @@ class Clause(object):
             else:
                 self.literals.add(literal)
 
+    def _vars(self):
+        return [lit.number for lit in self.literals]
+
     def to_string(self):
-        return "{}\n".format(" ".join(
-            lit.to_string() for lit in sorted(
-                self.literals, key=lambda x: x.number
-            )
+        return " ".join(lit.to_string() for lit in sorted(
+            self.literals, key=lambda x: x.number
         ))
+
+
+class Problem(object):
+
+    def __init__(self):
+        self.clauses = set()
+        self.var_set = VarSet()
+
+    def add_clause(self, clause):
+        self.clauses.add(clause)
+        self.var_set.add(clause._vars)
+
+    def to_string(self):
+        return "\n".join(
+            ["p cnf {0} {1}".format(
+                len(self.var_set.var_dict), len(self.clauses))] +\
+            sorted([c.to_string() for c in self.clauses])
+        )

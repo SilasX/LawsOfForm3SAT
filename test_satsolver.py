@@ -33,6 +33,13 @@ class TestVarSet(unittest.TestCase):
         actual = var_set.to_set()
         self.assertEqual(expected, actual)
 
+    def test_single_var(self):
+        expected = set([1, 2, 3])
+        var_set = satsolver.VarSet()
+        var_set.add(*range(1,4))
+        actual = var_set.to_set()
+        self.assertEqual(expected, actual)
+
 
 class TestLiteral(unittest.TestCase):
 
@@ -87,13 +94,46 @@ class TestClause(unittest.TestCase):
             self.clause_obj.add_literals(satsolver.Literal(4, False))
 
     def test_to_string(self):
-        expected = "1 2 -3\n"
+        expected = "1 2 -3"
         self.clause_obj.add_literals(*self.literals)
         actual = self.clause_obj.to_string()
         self.assertEqual(expected, actual)
 
 
-#class TestProblem(unittest.TestCase):
-#
-#    def test_3clause_3vars(self):
-#
+class TestProblem(unittest.TestCase):
+
+    def setUp(self):
+        """
+        set up problem:
+        (x1 + x2 + ~x3)(x2 + x3 + ~x4)(~x1 + x3 + ~x4)(x1 + ~x2 + x4)
+        """
+        self.problem = satsolver.Problem()
+        variables = [[1, 2, 3],
+                     [2, 3, 4],
+                     [1, 3, 4],
+                     [1, 2, 4],]
+        settings = [[True, True, False],
+                    [True, True, False],
+                    [False, True, False],
+                    [True, False, True],]
+        for i in xrange(len(variables)):
+            literals = [satsolver.Literal(variables[i][j], settings[i][j]) for j in xrange(len(variables[0]))]
+            clause = satsolver.Clause()
+            clause.add_literals(*literals)
+            self.problem.add_clause(clause)
+
+    def test_4clause_4vars(self):
+        lits = (
+            satsolver.Literal(2, True),
+            satsolver.Literal(3, True),
+            satsolver.Literal(4, False),
+        )
+        clause = satsolver.Clause()
+        clause.add_literals(*lits)
+        self.assertIn(clause.to_string(), set(
+            [c.to_string() for c in self.problem.clauses]
+        ))
+        expected = "p cnf 4 4\n" +\
+            "\n".join(["-1 3 -4", "1 -2 4", "1 2 -3", "2 3 -4", ])
+        actual = self.problem.to_string()
+        self.assertEqual(expected, actual)
