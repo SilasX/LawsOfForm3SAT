@@ -15,16 +15,9 @@ class TooManyLiterals(Exception):
         return repr(self.value)
 
 
-class Problem(object):
-
-    def __init__(self):
-        self.clauses = set()
-
-    def add_clause(self, clause):
-        self.clauses.add_clause(clause)
-
-
 class VarSet(object):
+    """A Variable Set is the set of variables a problem will use
+    """
 
     def __init__(self):
         self.var_dict = {}
@@ -38,17 +31,21 @@ class VarSet(object):
 
 
 class Literal(object):
+    """A literal is a specific variable with its sign
+    """
 
-    def __init__(self, number, setting):
+    def __init__(self, number, sign):
         self.number = number
-        self.setting = setting
+        self.sign = sign
 
     def to_string(self):
-        prefix = "" if self.setting == True else "-"
+        prefix = "" if self.sign == True else "-"
         return "{0}{1}".format(prefix, self.number)
 
 
 class Clause(object):
+    """A clause is a set of up to three Literals
+    """
 
     def __init__(self):
         self.literals = set()
@@ -70,6 +67,8 @@ class Clause(object):
 
 
 class Problem(object):
+    """Problem is made up of many clauses, and draws from a 
+    """
 
     def __init__(self):
         self.clauses = set()

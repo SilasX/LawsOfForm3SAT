@@ -49,7 +49,7 @@ class TestLiteral(unittest.TestCase):
 
     def test_single_literal(self):
         expected = (3, False)
-        actual = (self.literal_obj.number, self.literal_obj.setting)
+        actual = (self.literal_obj.number, self.literal_obj.sign)
         self.assertEqual(expected, actual)
 
     def test_to_string(self):
@@ -75,7 +75,7 @@ class TestClause(unittest.TestCase):
         for literal in self.literals:
             self.clause_obj.add_literals(literal)
         actual = set([
-            (lit.number, lit.setting) for lit in self.clause_obj.literals
+            (lit.number, lit.sign) for lit in self.clause_obj.literals
         ])
         self.assertEqual(expected, actual)
 
@@ -83,7 +83,7 @@ class TestClause(unittest.TestCase):
         expected = set([(1, True), (2, True), (3, False)])
         self.clause_obj.add_literals(*self.literals)
         actual = set([
-            (lit.number, lit.setting) for lit in self.clause_obj.literals
+            (lit.number, lit.sign) for lit in self.clause_obj.literals
         ])
         self.assertEqual(expected, actual)
 
@@ -112,12 +112,12 @@ class TestProblem(unittest.TestCase):
                      [2, 3, 4],
                      [1, 3, 4],
                      [1, 2, 4],]
-        settings = [[True, True, False],
+        signs = [[True, True, False],
                     [True, True, False],
                     [False, True, False],
                     [True, False, True],]
         for i in xrange(len(variables)):
-            literals = [satsolver.Literal(variables[i][j], settings[i][j]) for j in xrange(len(variables[0]))]
+            literals = [satsolver.Literal(variables[i][j], signs[i][j]) for j in xrange(len(variables[0]))]
             clause = satsolver.Clause()
             clause.add_literals(*literals)
             self.problem.add_clause(clause)
