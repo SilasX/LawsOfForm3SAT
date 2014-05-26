@@ -24,7 +24,7 @@ class VarSet(object):
     def __init__(self):
         self.var_dict = {}
 
-    def add(self, *keys):
+    def add(self, keys):
         for key in keys:
             self.var_dict[key] = True
 
@@ -32,7 +32,7 @@ class VarSet(object):
         """Returns a generator of every possible solution
         """
         var_set_size = len(self.var_dict)
-        var_list = self.var_dict.keys()
+        var_list = list(self.var_dict.keys())
         return ({var_list[i]: bln for i, bln in enumerate(sol)} 
             for sol in product([False, True], repeat=var_set_size))
 
@@ -98,12 +98,17 @@ class Problem(object):
 
     def add_clause(self, clause):
         self.clauses.add(clause)
-        self.var_set.add(clause._vars)
+        self.var_set.add(clause._vars())
 
     def is_valid(self, sol_dict):
         """given a solution dictionary, mapping numbers to booleans, return whether that setting makes the clause true
         """
         return all(clause.is_valid(sol_dict) for clause in self.clauses)
+
+    def brute_solve(self):
+        """returns list of all valid solutions, as found by brute force
+        """
+        return [sol for sol in self.var_set.all_solutions() if self.is_valid(sol)]
 
     def to_string(self):
         return "\n".join(
