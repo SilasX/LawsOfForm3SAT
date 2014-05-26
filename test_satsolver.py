@@ -154,6 +154,18 @@ class TestProblem(unittest.TestCase):
             clause.add_literals(*literals)
             self.problem.add_clause(clause)
 
+    def test_check_invalid_solution(self):
+        expected = False
+        invalid_sol = {1: False, 2: False, 3:True, 4: False}
+        actual = self.problem.is_valid(invalid_sol)
+        self.assertEqual(expected, actual)
+
+    def test_check_valid_solution(self):
+        expected = True
+        valid_sol = {1: True, 2: False, 3:True, 4: False}
+        actual = self.problem.is_valid(valid_sol)
+        self.assertEqual(expected, actual)
+
     def test_4clause_4vars(self):
         lits = (
             satsolver.Literal(2, True),

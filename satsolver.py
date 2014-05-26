@@ -90,6 +90,11 @@ class Problem(object):
         self.clauses.add(clause)
         self.var_set.add(clause._vars)
 
+    def is_valid(self, sol_dict):
+        """given a solution dictionary, mapping numbers to booleans, return whether that setting makes the clause true
+        """
+        return all(clause.is_valid(sol_dict) for clause in self.clauses)
+
     def to_string(self):
         return "\n".join(
             ["p cnf {0} {1}".format(
