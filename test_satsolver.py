@@ -111,6 +111,20 @@ class TestClause(unittest.TestCase):
         with self.assertRaises(satsolver.TooManyLiterals):
             self.clause_obj.add_literals(satsolver.Literal(4, False))
 
+    def test_clause_setting_false(self):
+        expected = False
+        sol_dict = {3: True, 2: False, 1: False}
+        self.clause_obj.add_literals(*self.literals)
+        actual = self.clause_obj.is_valid(sol_dict)
+        self.assertEqual(expected, actual)
+
+    def test_clause_setting_true(self):
+        expected = True
+        sol_dict = {3: True, 2: False, 1: True}
+        self.clause_obj.add_literals(*self.literals)
+        actual = self.clause_obj.is_valid(sol_dict)
+        self.assertEqual(expected, actual)
+
     def test_to_string(self):
         expected = "1 2 -3"
         self.clause_obj.add_literals(*self.literals)

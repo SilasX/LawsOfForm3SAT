@@ -64,6 +64,11 @@ class Clause(object):
             else:
                 self.literals.add(literal)
 
+    def is_valid(self, sol_dict):
+        """given a solution dictionary, mapping numbers to booleans, return whether that setting makes the clause true
+        """
+        return any(literal.is_valid(sol_dict) for literal in self.literals)
+
     def _vars(self):
         return [lit.number for lit in self.literals]
 
