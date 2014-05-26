@@ -52,6 +52,24 @@ class TestLiteral(unittest.TestCase):
         actual = (self.literal_obj.number, self.literal_obj.sign)
         self.assertEqual(expected, actual)
 
+    def test_check_literal_true_non_match(self):
+        expected = False
+        sol_dict = {3: True}
+        actual = self.literal_obj.is_valid(sol_dict)
+        self.assertEqual(expected, actual)
+
+    def test_check_literal_false_match(self):
+        expected = True
+        sol_dict = {3: False}
+        actual = self.literal_obj.is_valid(sol_dict)
+        self.assertEqual(expected, actual)
+
+    def test_check_literal_unmatched(self):
+        expected = False
+        sol_dict = {5: True}
+        actual = self.literal_obj2.is_valid(sol_dict)
+        self.assertEqual(expected, actual)
+
     def test_to_string(self):
         expected1, expected2 = "-3", "2"
         actual1 =  self.literal_obj.to_string()

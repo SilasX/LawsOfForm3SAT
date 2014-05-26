@@ -38,6 +38,13 @@ class Literal(object):
         self.number = number
         self.sign = sign
 
+    def is_valid(self, sol_dict):
+        """given a solution dictionary, mapping numbers to booleans, return whether that setting matches this boolean; return false if sol_dict doesn't set it
+        """
+        if self.number not in sol_dict:
+            return False
+        return sol_dict[self.number] == self.sign
+
     def to_string(self):
         prefix = "" if self.sign == True else "-"
         return "{0}{1}".format(prefix, self.number)
