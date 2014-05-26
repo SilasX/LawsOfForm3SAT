@@ -1,3 +1,5 @@
+from itertools import product
+
 def from_file(fd):
     output = Problem()
     for line in fd:
@@ -25,6 +27,14 @@ class VarSet(object):
     def add(self, *keys):
         for key in keys:
             self.var_dict[key] = True
+
+    def all_solutions(self):
+        """Returns a generator of every possible solution
+        """
+        var_set_size = len(self.var_dict)
+        var_list = self.var_dict.keys()
+        return ({var_list[i]: bln for i, bln in enumerate(sol)} 
+            for sol in product([False, True], repeat=var_set_size))
 
     def to_set(self):
         return set(self.var_dict.keys())

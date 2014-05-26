@@ -40,6 +40,13 @@ class TestVarSet(unittest.TestCase):
         actual = var_set.to_set()
         self.assertEqual(expected, actual)
 
+    def test_all_sols(self):
+        var_set = satsolver.VarSet()
+        var_set.add(*range(1,4))
+        expected = {1:True, 2: False, 3: True}
+        actual = var_set.all_solutions()
+        self.assertIn(expected, actual)
+
 
 class TestLiteral(unittest.TestCase):
 
@@ -181,3 +188,7 @@ class TestProblem(unittest.TestCase):
             "\n".join(["-1 3 -4", "1 -2 4", "1 2 -3", "2 3 -4", ])
         actual = self.problem.to_string()
         self.assertEqual(expected, actual)
+
+
+if __name__ == "__main__":
+    unittest.main()
