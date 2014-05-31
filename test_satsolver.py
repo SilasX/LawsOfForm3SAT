@@ -213,6 +213,25 @@ class TestProblem(unittest.TestCase):
         actual = self.problem.to_string()
         self.assertEqual(expected, actual)
 
+    def test_from_string(self):
+        input_string = "\n".join(["p cnf 4 4", "-1 3 -4", "1 -2 4", "1 2 -3", "2 3 -4"])
+        prob = satsolver.Problem.from_string(input_string)
+        lits = (
+            satsolver.Literal(2, True),
+            satsolver.Literal(3, True),
+            satsolver.Literal(4, False),
+        )
+        # Check that all target clauses are in factory method's Problem
+        for clause in self.problem.clauses:
+            self.assertIn(clause.to_string(), set(
+                [c.to_string() for c in prob.clauses]
+            ))
+        # ... and vice versa
+        for clause in self.problem.clauses:
+            self.assertIn(clause.to_string(), set(
+                [c.to_string() for c in prob.clauses]
+            ))
+
 
 if __name__ == "__main__":
     unittest.main()

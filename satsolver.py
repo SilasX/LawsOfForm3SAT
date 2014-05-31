@@ -138,3 +138,14 @@ class Problem(object):
                 self.var_set.size(), len(self.clauses))] +\
             sorted([c.to_string() for c in self.clauses])
         )
+
+    @classmethod
+    def from_string(self, string):
+        out_problem = Problem()
+        for line in string.split('\n'):
+            if line[0] == 'c':
+                continue
+            if line[0] == 'p':
+                continue  # don't bother with length checks for now
+            out_problem.add_clause(Clause.from_string(line))
+        return out_problem
