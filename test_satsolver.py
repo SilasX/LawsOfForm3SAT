@@ -149,6 +149,19 @@ class TestClause(unittest.TestCase):
         actual = self.clause_obj.to_string()
         self.assertEqual(expected, actual)
 
+    def test_from_string(self):
+        expected = set([(1, True), (2, True), (3, False)])
+        input_string = " -3  1 2 0"
+        input_clause = satsolver.Clause.from_string(input_string)
+        actual = set([
+            (lit.number, lit.sign) for lit in input_clause.literals
+        ])
+        self.assertEqual(expected, actual)
+
+    def test_from_string_invalid(self):
+        with self.assertRaises(err.InvalidLiteralToken):
+            satsolver.Clause.from_string("- 3 1 2 0")
+
 
 class TestProblem(unittest.TestCase):
 

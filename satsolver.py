@@ -100,6 +100,15 @@ class Clause(object):
             self.literals, key=lambda x: x.number
         ))
 
+    @classmethod
+    def from_string(cls, string):
+        """Parses a string into a clause. Standard format terminates a clause with 0, but for now, this just ignores zeros and assumes clauses are line-separated.
+        """
+        tokens = [x for x in string.strip().split() if x != "0"]
+        out_clause = Clause()
+        out_clause.add_literals(*[Literal.from_string(x) for x in tokens])
+        return out_clause
+
 
 class Problem(object):
     """Problem is made up of many clauses, and draws from a 
