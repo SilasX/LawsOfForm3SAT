@@ -85,6 +85,16 @@ class TestLiteral(unittest.TestCase):
         self.assertEqual(expected1, actual1)
         self.assertEqual(expected2, actual2)
 
+    def test_from_string(self):
+        expected = satsolver.Literal(3, False)
+        actual = satsolver.Literal.from_string("-3")
+        self.assertEqual(expected, actual)
+
+    def test_from_string_invalid(self):
+        with self.assertRaises(err.InvalidLiteralToken):
+            satsolver.Literal.from_string("3-")
+        with self.assertRaises(err.InvalidLiteralToken):
+            satsolver.Literal.from_string("q")
 
 class TestClause(unittest.TestCase):
 

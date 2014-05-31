@@ -40,6 +40,14 @@ class Literal(object):
         self.number = number
         self.sign = sign
 
+
+    def __eq__(self, lit2):
+        """returns whether literal lit2 is the same literal as this object (in identifying number and sign)
+        """
+        if type(lit2) is type(self):
+            return self.__dict__ == lit2.__dict__
+        return False
+
     def is_valid(self, sol_dict):
         """given a solution dictionary, mapping numbers to booleans, return whether that setting matches this boolean; return false if sol_dict doesn't set it
         """
@@ -50,6 +58,19 @@ class Literal(object):
     def to_string(self):
         prefix = "" if self.sign == True else "-"
         return "{0}{1}".format(prefix, self.number)
+
+    @classmethod
+    def from_string(cls, string):
+        """given: string containing positive or negative integer, return Literal object sith sign = False for negatives, True otherwise and number equal to integer value
+        """
+        try:
+            number = int(string)
+        except:
+            raise err.InvalidLiteralToken(string)
+        if string[0] == '-':
+            return Literal(int(string[1:]), False)
+        else:
+            return Literal(int(string), True)
 
 
 class Clause(object):
