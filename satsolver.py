@@ -1,20 +1,14 @@
 from itertools import product
 
+import sat_errs as err
+
+
 def from_file(fd):
     output = Problem()
     for line in fd:
         if len(line) == 0 or line[0] == 'c':
             continue
     return output
-
-
-class TooManyLiterals(Exception):
-
-    def __init__(self):
-        self.value = "Cannot add another literal to this clause."
-
-    def __str__(self):
-        return repr(self.value)
 
 
 class VarSet(object):
@@ -68,7 +62,7 @@ class Clause(object):
     def add_literals(self, *literals):
         for literal in literals:
             if len(self.literals) >= 3:
-                raise TooManyLiterals
+                raise err.TooManyLiterals
             else:
                 self.literals.add(literal)
 

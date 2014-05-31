@@ -1,6 +1,7 @@
 import unittest
 from os.path import dirname, join
 
+import sat_errs as err
 import satsolver
 
 THIS_DIR = dirname(__file__)
@@ -115,7 +116,7 @@ class TestClause(unittest.TestCase):
     def test_too_many_literals(self):
         for literal in self.literals:
             self.clause_obj.add_literals(literal)
-        with self.assertRaises(satsolver.TooManyLiterals):
+        with self.assertRaises(err.TooManyLiterals):
             self.clause_obj.add_literals(satsolver.Literal(4, False))
 
     def test_clause_setting_false(self):
