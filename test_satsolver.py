@@ -30,14 +30,14 @@ class TestVarSet(unittest.TestCase):
         expected = set([2])
         var_set = satsolver.VarSet()
         var_set.add([2])
-        actual = var_set.to_set()
+        actual = var_set._set
         self.assertEqual(expected, actual)
 
     def test_single_var(self):
         expected = set([1, 2, 3])
         var_set = satsolver.VarSet()
         var_set.add(range(1,4))
-        actual = var_set.to_set()
+        actual = var_set._set
         self.assertEqual(expected, actual)
 
     def test_all_sols(self):

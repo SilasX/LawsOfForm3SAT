@@ -22,22 +22,20 @@ class VarSet(object):
     """
 
     def __init__(self):
-        self.var_dict = {}
+        self._set = set()
 
     def add(self, keys):
-        for key in keys:
-            self.var_dict[key] = True
+        self._set = self._set | set(keys)
+
+    def size(self):
+        return len(self._set)
 
     def all_solutions(self):
         """Returns a generator of every possible solution
         """
-        var_set_size = len(self.var_dict)
-        var_list = list(self.var_dict.keys())
+        var_list = list(self._set)
         return ({var_list[i]: bln for i, bln in enumerate(sol)} 
-            for sol in product([False, True], repeat=var_set_size))
-
-    def to_set(self):
-        return set(self.var_dict.keys())
+            for sol in product([False, True], repeat=self.size()))
 
 
 class Literal(object):
@@ -113,6 +111,6 @@ class Problem(object):
     def to_string(self):
         return "\n".join(
             ["p cnf {0} {1}".format(
-                len(self.var_set.var_dict), len(self.clauses))] +\
+                self.var_set.size(), len(self.clauses))] +\
             sorted([c.to_string() for c in self.clauses])
         )
